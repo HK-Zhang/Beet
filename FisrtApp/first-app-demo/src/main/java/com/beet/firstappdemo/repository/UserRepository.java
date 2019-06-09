@@ -1,5 +1,6 @@
 package com.beet.firstappdemo.repository;
 
+import java.util.Collection;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -27,5 +28,11 @@ public class UserRepository {
         Integer id = idGenerator.incrementAndGet();
         user.setId(id);
         return repository.put(id, user) == null;
+    }
+
+    public Collection<User> findAll(){
+
+        return repository.values();
+
     }
 }
