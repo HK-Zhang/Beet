@@ -1,24 +1,81 @@
 package com.beet;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.Callable;
+import java.util.concurrent.TimeUnit;
+
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.ObservableSource;
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
 
 /**
  * BasicRx
  */
 public class BasicRx {
 
-    public static void Execute() {
+    public static void Execute() throws InterruptedException {
         // BasicCreate();
-        Just();
+        // Just();
+        // FromIterable();
+        // Defer();
+        // Interval();
+        // Range();
+        // Timer();
+        // Repeat();
+        // ConsumerDemo();
+        Trigger();
     }
 
     public static void Just() {
         Observable<String> observable = Observable.just("Hello");
         // observable.subscribe(System.out::println);
+        observable.subscribe((a) -> System.out.println(a));
+    }
+
+    public static void FromIterable() {
+        List<String> list = new ArrayList<String>();
+        for (int i = 0; i < 10; i++) {
+            list.add("Hello" + i);
+        }
+
+        Observable<String> observable = Observable.fromIterable((Iterable<String>) list);
+
+        observable.subscribe((a) -> System.out.println(a));
+    }
+
+    public static void Defer() {
+        Observable<String> observable = Observable.defer(new Callable<ObservableSource<? extends String>>() {
+            @Override
+            public ObservableSource<? extends String> call() throws Exception {
+                return Observable.just("hello");
+            }
+        });
+
+        observable.subscribe((a) -> System.out.println(a));
+    }
+
+    public static void Interval() {
+        Observable<Long> observable = Observable.interval(2, TimeUnit.SECONDS);
+        observable.subscribe((a) -> System.out.println(a));
+    }
+
+    public static void Range() {
+        Observable<Integer> observable = Observable.range(1, 20);
+        observable.subscribe((a) -> System.out.println(a));
+    }
+
+    public static void Timer() {
+        Observable<Long> observable = Observable.timer(2, TimeUnit.SECONDS);
+        observable.subscribe((a) -> System.out.println(a));
+    }
+
+    public static void Repeat() {
+        Observable<Integer> observable = Observable.just(123).repeat();
         observable.subscribe((a) -> System.out.println(a));
     }
 
@@ -56,6 +113,42 @@ public class BasicRx {
             }
         };
 
+        observable.subscribe(observer);
+    }
+
+    public static void ConsumerDemo() {
+        Observable.just("hello").subscribe(new Consumer<String>() {
+            @Override
+            public void accept(String s) throws Exception {
+                System.out.println(s);
+            }
+        });
+    }
+
+    public static void Trigger() throws InterruptedException {
+        Observable<Long> observable = Observable.interval(2, TimeUnit.SECONDS);
+        Observer<Long> observer = new Observer<Long>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+                
+            }
+
+            @Override
+            public void onNext(Long aLong) {
+                    System.out.println(aLong);
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        };
+        Thread.sleep(10000);//睡眠10秒后，才进行订阅  仍然从0开始，表示Observable内部逻辑刚开始执行
         observable.subscribe(observer);
     }
 }

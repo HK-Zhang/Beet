@@ -10,7 +10,7 @@ import java.io.InputStreamReader;
  *
  */
 public class App {
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, InterruptedException {
         System.out.println("=== RunnableTest ===");
 
         Runnable r1 = new Runnable() {
