@@ -25,7 +25,8 @@ public class App {
         r1.run();
         r2.run();
 
-        BasicRx.Execute();
+        // BasicRx.Execute();
+        OperatorRx.Execute();
 
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         System.out.print("Enter String");
