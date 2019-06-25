@@ -17,7 +17,9 @@ public class OperatorRx {
     public static void Execute() {
         // Map();
         // FlatMap();
-        Filter();
+        // Filter();
+        // Take();
+        DoOnNext();
     }
 
     public static void Map() {
@@ -68,6 +70,50 @@ public class OperatorRx {
                     return true;
                 }
                 return false;
+            }
+        }).subscribe(new Consumer<Object>() {
+            @Override
+            public void accept(Object o) throws Exception {
+                System.out.println((String) o);
+            }
+        });
+    }
+
+    public static void Take(){
+        List<String> list = new ArrayList<String>();
+        for (int i = 0; i < 10; i++) {
+            list.add("Hello" + i);
+        }
+
+        Observable.just(list).flatMap(new Function<List<String>, ObservableSource<?>>() {
+            @Override
+            public ObservableSource<?> apply(List<String> strings) throws Exception {
+                return Observable.fromIterable(strings);
+            }
+        }).take(5).subscribe(new Consumer<Object>() {
+            @Override
+            public void accept(Object o) throws Exception {
+                System.out.println((String) o);
+            }
+        });
+
+    }
+
+    public static void DoOnNext() {
+        List<String> list = new ArrayList<String>();
+        for (int i = 0; i < 10; i++) {
+            list.add("Hello" + i);
+        }
+        
+        Observable.just(list).flatMap(new Function<List<String>, ObservableSource<?>>() {
+            @Override
+            public ObservableSource<?> apply(List<String> strings) throws Exception {
+                return Observable.fromIterable(strings);
+            }
+        }).take(5).doOnNext(new Consumer<Object>() {
+            @Override
+            public void accept(Object o) throws Exception {
+                System.out.println("Preparation");
             }
         }).subscribe(new Consumer<Object>() {
             @Override
