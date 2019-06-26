@@ -26,7 +26,8 @@ public class App {
         r2.run();
 
         // BasicRx.Execute();
-        OperatorRx.Execute();
+        // OperatorRx.Execute();
+        Scheduler.Execute();
 
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         System.out.print("Enter String");
