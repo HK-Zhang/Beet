@@ -1,0 +1,12 @@
+spring:
+  profiles: dev
+user:
+  userName: Henry-dev
+  sex: male
+  age: 18
+book:
+  name: SpringCloudInAction
+  author: ZhaoYongChao
+  desc: ${book.author} is writing <${book.name}>
+server:
+  port: 8080
