@@ -15,6 +15,9 @@ public class Book {
     @Value("${book.desc}")
     private String desc;
 
+    @Value("${book.id}")
+    private int id;
+
     public String getName() {
         return name;
     }
@@ -39,4 +42,11 @@ public class Book {
         this.desc = desc;
     }
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 }

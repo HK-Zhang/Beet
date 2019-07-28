@@ -8,5 +8,6 @@ book:
   name: SpringCloudInAction
   author: ZhaoYongChao
   desc: ${book.author} is writing <${book.name}>
+  id: ${random.int}
 server:
   port: 8080
