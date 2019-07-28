@@ -25,8 +25,8 @@ public class App {
         r1.run();
         r2.run();
 
-        BasicRx.Execute();
-        // OperatorRx.Execute();
+        // BasicRx.Execute();
+        OperatorRx.Execute();
         // Scheduler.Execute();
         // Backpressure.Execute();
 

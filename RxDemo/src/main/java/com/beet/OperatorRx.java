@@ -5,6 +5,7 @@ import java.util.List;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
+import io.reactivex.functions.BiFunction;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.functions.Predicate;
@@ -19,7 +20,10 @@ public class OperatorRx {
         // FlatMap();
         // Filter();
         // Take();
-        DoOnNext();
+        // DoOnNext();
+        // Merge();
+        // Concat();
+        Zip();
     }
 
     public static void Map() {
@@ -79,7 +83,7 @@ public class OperatorRx {
         });
     }
 
-    public static void Take(){
+    public static void Take() {
         List<String> list = new ArrayList<String>();
         for (int i = 0; i < 10; i++) {
             list.add("Hello" + i);
@@ -104,7 +108,7 @@ public class OperatorRx {
         for (int i = 0; i < 10; i++) {
             list.add("Hello" + i);
         }
-        
+
         Observable.just(list).flatMap(new Function<List<String>, ObservableSource<?>>() {
             @Override
             public ObservableSource<?> apply(List<String> strings) throws Exception {
@@ -121,5 +125,48 @@ public class OperatorRx {
                 System.out.println((String) o);
             }
         });
+    }
+
+    public static void Merge() {
+        Integer nums1[] = new Integer[] { 5, 6, 7, 8, 9 };
+        Observable.just(1, 2, 3, 4, 5).mergeWith(Observable.fromArray(nums1)).subscribe(new Consumer<Integer>() {
+
+            @Override
+            public void accept(Integer t) throws Exception {
+                System.out.println(t);
+            }
+
+        });
+    }
+
+    public static void Concat() {
+        Integer nums1[] = new Integer[] { 5, 6, 7, 8, 9 };
+        Observable.just(1, 2, 3, 4, 5).concatWith(Observable.fromArray(nums1)).subscribe(new Consumer<Integer>() {
+
+            @Override
+            public void accept(Integer t) throws Exception {
+                System.out.println(t);
+            }
+
+        });
+    }
+
+    public static void Zip() {
+        String names[] = new String[] { "red", "orange", "yellow", "green", "blue", "purple" };
+        Observable.just(1, 2, 3, 4, 5, 6, 7, 8)
+                .zipWith(Observable.fromArray(names), new BiFunction<Integer, String, String>() {
+
+                    @Override
+                    public String apply(Integer t1, String t2) throws Exception {
+                        return t1 + t2;
+                    }
+                }).subscribe(new Consumer<String>() {
+
+                    @Override
+                    public void accept(String t) throws Exception {
+                        System.out.println(t);
+                    }
+
+                });
     }
 }
