@@ -1,7 +1,7 @@
 spring:
-  profiles: stage
+  profiles: prod
 user:
-  userName: Henry-stage
+  userName: Henry-prod
   sex: male
   age: 18
 book:
