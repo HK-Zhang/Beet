@@ -26,7 +26,11 @@ public class Scheduler {
 
     public static void Execute() {
         // Basic();
-        ApiCall();
+        // ApiCall();
+        // Demo2();
+        // Demo3();
+        // TrampolineDemo();
+        SingleDemo();
     }
 
     public static void Basic() {
@@ -86,6 +90,128 @@ public class Scheduler {
             public void accept(City t) throws Exception {
                 System.out.println(t);
             }
+        });
+
+    }
+
+    // Two times subscribeone and one time onserver on
+    public static void Demo2() {
+        Observable.create(new ObservableOnSubscribe<Integer>() {
+
+            @Override
+            public void subscribe(ObservableEmitter<Integer> emitter) throws Exception {
+                for (int i = 0; i < 5; i++) {
+                    System.out.println("Emit thread:" + Thread.currentThread().getName() + "------>" + "emit:" + i);
+                    Thread.sleep(1000);
+                    emitter.onNext(i);
+                }
+                emitter.onComplete();
+            }
+
+        }).subscribeOn(Schedulers.io()).map(new Function<Integer, Integer>() {
+
+            @Override
+            public Integer apply(Integer t) throws Exception {
+                System.out.println("process thread:" + Thread.currentThread().getName() + "------>" + "process:" + t);
+                return t;
+            }
+
+        }).subscribeOn(Schedulers.newThread()).observeOn(Schedulers.newThread()).subscribe(new Consumer<Integer>() {
+
+            @Override
+            public void accept(Integer t) throws Exception {
+                System.out.println("receive thread:" + Thread.currentThread().getName() + "------>" + "receive:" + t);
+            }
+
+        });
+    }
+
+    // one time subscribeOn and Two times observerOn
+    public static void Demo3() {
+        Observable.create(new ObservableOnSubscribe<Integer>() {
+
+            @Override
+            public void subscribe(ObservableEmitter<Integer> emitter) throws Exception {
+                for (int i = 0; i < 5; i++) {
+                    System.out.println("Emit thread:" + Thread.currentThread().getName() + "------>" + "emit:" + i);
+                    Thread.sleep(1000);
+                    emitter.onNext(i);
+                }
+                emitter.onComplete();
+            }
+
+        }).subscribeOn(Schedulers.io()).observeOn(Schedulers.newThread()).map(new Function<Integer, Integer>() {
+
+            @Override
+            public Integer apply(Integer t) throws Exception {
+                System.out.println("process thread:" + Thread.currentThread().getName() + "------>" + "process:" + t);
+                return t;
+            }
+
+        }).observeOn(Schedulers.newThread()).subscribe(new Consumer<Integer>() {
+
+            @Override
+            public void accept(Integer t) throws Exception {
+                System.out.println("receive thread:" + Thread.currentThread().getName() + "------>" + "receive:" + t);
+            }
+
+        });
+
+    }
+
+    public static void TrampolineDemo() {
+        Observable.create(new ObservableOnSubscribe<Integer>() {
+
+            @Override
+            public void subscribe(ObservableEmitter<Integer> emitter) throws Exception {
+                for (int i = 0; i < 5; i++) {
+                    System.out.println("Emit thread:" + Thread.currentThread().getName() + "------>" + "emit:" + i);
+                    Thread.sleep(1000);
+                    emitter.onNext(i);
+                }
+                emitter.onComplete();
+            }
+
+        }).subscribeOn(Schedulers.io()).observeOn(Schedulers.trampoline()).subscribe(new Consumer<Integer>() {
+
+            @Override
+            public void accept(Integer t) throws Exception {
+                Thread.sleep(2000);
+                System.out.println("receive thread:" + Thread.currentThread().getName() + "------>" + "receive:" + t);
+
+            }
+
+        });
+    }
+
+    public static void SingleDemo() {
+        Observable.create(new ObservableOnSubscribe<Integer>() {
+
+            @Override
+            public void subscribe(ObservableEmitter<Integer> emitter) throws Exception {
+                for (int i = 0; i < 5; i++) {
+                    System.out.println("Emit thread:" + Thread.currentThread().getName() + "------>" + "emit:" + i);
+                    Thread.sleep(1000);
+                    emitter.onNext(i);
+                }
+                emitter.onComplete();
+            }
+
+        }).subscribeOn(Schedulers.single()).observeOn(Schedulers.single()).map(new Function<Integer, Integer>() {
+
+            @Override
+            public Integer apply(Integer t) throws Exception {
+                System.out.println("process thread:" + Thread.currentThread().getName() + "------>" + "process:" + t);
+                return t;
+            }
+
+        }).observeOn(Schedulers.single()).subscribe(new Consumer<Integer>() {
+
+            @Override
+            public void accept(Integer t) throws Exception {
+                System.out.println("receive thread:" + Thread.currentThread().getName() + "------>" + "receive:" + t);
+            }
+
         });
 
     }

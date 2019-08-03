@@ -26,8 +26,8 @@ public class App {
         r2.run();
 
         // BasicRx.Execute();
-        OperatorRx.Execute();
-        // Scheduler.Execute();
+        // OperatorRx.Execute();
+        Scheduler.Execute();
         // Backpressure.Execute();
 
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
